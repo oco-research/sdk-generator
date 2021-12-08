@@ -76,6 +76,17 @@ runs:
 
     - name: Push changes to external repo
       shell: bash
+      env:
+        INPUT_GENERATOR: ${{ inputs.generator }}
+        INPUT_SCHEMA_FILE: ${{ inputs.schema-file }}
+        INPUT_GITHUB_USER_EMAIL: ${{ inputs.github-user-email }}
+        INPUT_GITHUB_USER_NAME: ${{ inputs.github-user-name }}
+        INPUT_GITHUB_DOMAIN: ${{ inputs.github-domain }}
+        INPUT_GITHUB_OWNER: ${{ inputs.github-owner }}
+        INPUT_GITHUB_REPO: ${{ inputs.github-repo }}
+        INPUT_GITHUB_BRANCH: ${{ inputs.github-branch }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
+        INPUT_PACKAGE_TOKEN: ${{ inputs.package-token }}
       run: |
         OPENAPI_VERSION=$(cat "$INPUT_SCHEMA_FILE" | python3 -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
         echo "OpenAPI Version: ${OPENAPI_VERSION}"
