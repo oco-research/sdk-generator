@@ -1,0 +1,70 @@
+name: "Generate SDK and documentation based on schema, push to a repo, publish as package"
+description: "GitHub action to generate SDKs based on schema, simplify the integration, minimize costs by reducing manual maintenance of client SDKs."
+branding:
+  icon: package
+  color: red
+
+inputs:
+  generator:
+    description: The name of the generator (i.e. the language to generate the client library in) to use e.g. "typescript-angular"
+    required: true
+  github-owner:
+    description: GitHub organization to push the generated SDK
+    required: true
+  github-repo:
+    description: GitHub repo to push the generated SDK
+    required: true
+  github-branch:
+    description: GitHub repo branch to push the generated SDK
+    required: true
+  github-token:
+    description: GitHub user token to push the generated SDK
+    required: true
+  package-token:
+    description: Package system token to publish the generated SDK package
+    required: true
+  config-path:
+    description: Path to folder where generator configurations reside (without trailing slash)
+    required: false
+    default: .openapi-generator/generators
+  schema-file:
+    description: Path to schema file
+    required: false
+    default: openapi.json
+  github-user-email:
+    description: GitHub user email for commits
+    required: false
+    default: devex-open-contribution-office@adobe.com
+  github-user-name:
+    description: GitHub user name for commits
+    required: false
+    default: OCO SDK Generator
+
+runs:
+  using: composite
+
+  steps:
+    - uses: actions/checkout@v2
+
+    - name: Copy .openapi-generator-ignore file to ignore files during generation
+      shell: bash
+      run: mkdir ${{ inputs.generator }}-client && cp ${{ inputs.config-path }}/${{ inputs.generator }}/.openapi-generator-ignore ${{ inputs.generator }}-client/ || true
+
+    - name: Generate ${{ inputs.generator }} SDK
+      uses: openapi-generators/openapitools-generator-action@v1
+      with:
+        generator: ${{ inputs.generator }}
+        config-file: ${{ inputs.config-path }}/${{ inputs.generator }}/config.yaml
+
+#    - name: Push changes to external repo
+#      uses: oco-research/pusher@v1
+#      with:
+#        generator: ${{ inputs.generator }}
+#        schema-file: ${{ inputs.schema-file }}
+#        github-user-email: ${{ inputs.github-user-email }}
+#        github-user-name: ${{ inputs.github-user-name }}
+#        github-owner: ${{ inputs.github-owner }}
+#        github-repo: ${{ inputs.github-repo }}
+#        github-branch: ${{ inputs.github-branch }}
+#        github-token: ${{ inputs.github-token }}
+#        package-token: ${{ inputs.package-token }}
