@@ -8,6 +8,10 @@ inputs:
   generator:
     description: The name of the generator (i.e. the language to generate the client library in) to use e.g. "typescript-angular"
     required: true
+  github-domain:
+    description: GitHub domain to push the generated SDK
+    required: false
+    default: github.com
   github-owner:
     description: GitHub organization to push the generated SDK
     required: true
@@ -63,8 +67,26 @@ runs:
 #        schema-file: ${{ inputs.schema-file }}
 #        github-user-email: ${{ inputs.github-user-email }}
 #        github-user-name: ${{ inputs.github-user-name }}
+#        github-domain: ${{ inputs.github-domain }}
 #        github-owner: ${{ inputs.github-owner }}
 #        github-repo: ${{ inputs.github-repo }}
 #        github-branch: ${{ inputs.github-branch }}
 #        github-token: ${{ inputs.github-token }}
 #        package-token: ${{ inputs.package-token }}
+
+    - name: Push changes to external repo
+      shell: bash
+      run: |
+        OPENAPI_VERSION=$(cat "$INPUT_SCHEMA_FILE" | python3 -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
+        echo "OpenAPI Version: ${OPENAPI_VERSION}"
+        git config --global user.email "$INPUT_GITHUB_USER_EMAIL"
+        git config --global user.name "$INPUT_GITHUB_USER_NAME"
+        git config --global init.defaultBranch "$INPUT_GITHUB_BRANCH"
+        git config --global pull.rebase false
+        cd "$INPUT_GENERATOR"-client
+        git init
+        git add .
+        git commit -m "${OPENAPI_VERSION}"
+        git remote add origin https://"$INPUT_GITHUB_TOKEN"@"$INPUT_GITHUB_DOMAIN"/"$INPUT_GITHUB_OWNER"/"$INPUT_GITHUB_REPO".git
+        git pull origin "$INPUT_GITHUB_BRANCH" --allow-unrelated-histories -X ours
+        git push origin "$INPUT_GITHUB_BRANCH"
