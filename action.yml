@@ -54,7 +54,7 @@ runs:
       uses: openapi-generators/openapitools-generator-action@v1
       with:
         generator: ${{ inputs.generator }}
-        config-file: ${{ inputs.config-path }}/${{ inputs.generator }}/config.yaml
+        config-file: ${{ inputs.config-path }}/${{ inputs.generator }}/config.yml
 
 #    - name: Push changes to external repo
 #      uses: oco-research/pusher@v1
