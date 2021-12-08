@@ -22,7 +22,7 @@ inputs:
     required: true
   package-token:
     description: Package system token to publish the generated SDK package
-    required: true
+    required: false
   config-path:
     description: Path to folder where generator configurations reside (without trailing slash)
     required: false
