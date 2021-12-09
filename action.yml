@@ -38,11 +38,11 @@ inputs:
   github-user-email:
     description: GitHub user email for commits
     required: false
-    default: devex-open-contribution-office@adobe.com
+    default: oco-bot@adobe.com
   github-user-name:
     description: GitHub user name for commits
     required: false
-    default: OCO SDK Generator
+    default: Adobe OCO Bot
 
 runs:
   using: composite
