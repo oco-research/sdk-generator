@@ -63,20 +63,6 @@ runs:
         generator: ${{ inputs.generator }}
         config-file: ${{ inputs.config-path }}/${{ inputs.generator }}/config.yml
 
-#    - name: Push changes to external repo
-#      uses: oco-research/pusher@v1
-#      with:
-#        generator: ${{ inputs.generator }}
-#        schema-file: ${{ inputs.schema-file }}
-#        github-user-email: ${{ inputs.github-user-email }}
-#        github-user-name: ${{ inputs.github-user-name }}
-#        github-domain: ${{ inputs.github-domain }}
-#        github-owner: ${{ inputs.github-owner }}
-#        github-repo: ${{ inputs.github-repo }}
-#        github-branch: ${{ inputs.github-branch }}
-#        github-token: ${{ inputs.github-token }}
-#        package-token: ${{ inputs.package-token }}
-
     - name: Set secrets to target client repo
       run: node ${{ github.action_path }}/dist/index.js '${{inputs.token}}' '${{inputs.gh_token}}'
       shell: bash
