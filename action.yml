@@ -76,12 +76,9 @@ runs:
 #        github-branch: ${{ inputs.github-branch }}
 #        github-token: ${{ inputs.github-token }}
 #        package-token: ${{ inputs.package-token }}
-    - name: Install npm packages
-      run: npm install
-      shell: bash
 
     - name: Set secrets to target client repo
-      run: node index.js '${{inputs.token}}' '${{inputs.gh_token}}'
+      run: node dist/index.js '${{inputs.token}}' '${{inputs.gh_token}}'
       shell: bash
       env:
         INPUT_GITHUB_OWNER: ${{ inputs.github-owner }}
