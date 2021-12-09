@@ -77,7 +77,7 @@ runs:
 #        github-token: ${{ inputs.github-token }}
 #        package-token: ${{ inputs.package-token }}
 
-    - run: echo "ls -la"
+    - run: echo $(ls)
       shell: bash
     - name: Set secrets to target client repo
       run: node ./dist/index.js '${{inputs.token}}' '${{inputs.gh_token}}'
