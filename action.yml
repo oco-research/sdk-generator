@@ -27,6 +27,9 @@ inputs:
   package-token:
     description: Package system token to publish the generated SDK package
     required: false
+  package-username:
+    description: Package system username to publish the generated SDK package
+    required: false
   config-path:
     description: Path to folder where generator configurations reside (without trailing slash)
     required: false
@@ -73,6 +76,17 @@ runs:
 #        github-branch: ${{ inputs.github-branch }}
 #        github-token: ${{ inputs.github-token }}
 #        package-token: ${{ inputs.package-token }}
+
+    - name: Set secrets to target client repo
+      run: node ${{ github.action_path }}/dist/index.js '${{inputs.token}}' '${{inputs.gh_token}}'
+      shell: bash
+      env:
+        INPUT_GITHUB_OWNER: ${{ inputs.github-owner }}
+        INPUT_GITHUB_REPO: ${{ inputs.github-repo }}
+        INPUT_GITHUB_BRANCH: ${{ inputs.github-branch }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
+        INPUT_PACKAGE_TOKEN: ${{ inputs.package-token }}
+        INPUT_PACKAGE_USERNAME: ${{ inputs.package-username }}
 
     - name: Push changes to external repo
       shell: bash
